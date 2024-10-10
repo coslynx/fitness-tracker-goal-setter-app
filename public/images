@@ -1,0 +1,88 @@
+// public/images/index.js
+
+// Core Functionality:
+
+// The purpose of `public/images/index.js` is to handle the storage and organization of image assets for the Fitness Tracker and Goal Setter App. It ensures that image files are properly stored, accessible, and optimized for different device sizes. 
+
+// Essential Dependencies and Imports:
+
+// 1. Core Modules:
+
+import path from 'path';
+import fs from 'fs';
+
+// 2. Third-Party Libraries:
+
+//  -  `sharp`:  High-performance image processing library for resizing and optimization.
+
+import sharp from 'sharp';
+
+// 3. Internal Modules:
+
+import { sanitizeInput } from '@lib/utils/validators';
+
+// Main Components/Functions/Classes:
+
+// 1. `getImagePath`:  Gets the full path to an image file based on its filename. 
+
+const getImagePath = (filename) => {
+  const sanitizedFilename = sanitizeInput(filename);
+  return path.join(__dirname, sanitizedFilename);
+};
+
+// 2. `resizeImage`:  Resizes an image to different dimensions for optimal display.
+
+const resizeImage = async (filename, width, height) => {
+  const imagePath = getImagePath(filename);
+  try {
+    await sharp(imagePath)
+      .resize(width, height)
+      .toFile(imagePath);
+  } catch (error) {
+    console.error('Error resizing image:', error);
+  }
+};
+
+// Data Flow and State Management:
+
+// -  The `public/images` directory acts as the central storage location for all image assets. 
+// -  Images are accessed by their filenames, which are sanitized for security purposes. 
+// -   The `resizeImage` function manipulates image files directly within the `public/images` directory, ensuring that optimized images are stored locally. 
+
+// API Interactions:
+
+// -  None: This file doesn't directly interact with any APIs. It handles local image processing and manipulation.
+
+// Error Handling and Logging:
+
+// -  Catch and log errors during image processing (resizing). 
+// -   Log levels:  Use `console.error` for critical errors. 
+// -  Sensitive data:  No sensitive data is logged.
+
+// Performance Optimization:
+
+// -   `sharp`:  Uses `sharp` library for high-performance image processing.
+// -  Lazy Loading:  Images can be lazy loaded in the frontend to improve initial page load times. 
+// -  File Compression:  Use appropriate image compression techniques (e.g., WebP) to reduce file sizes and enhance loading speed.
+
+// Security Essentials:
+
+// -  Input Sanitization:  Sanitizes image filenames using `sanitizeInput` to prevent potential injection attacks.
+// -  File Storage:  Stores images securely within the `public` directory, which is not directly accessible to users.
+
+// Integration with MVP Components:
+
+// -  All components that display images within the application will use filenames to reference images from the `public/images` directory. 
+
+// Code Style and Documentation:
+
+// -   Follow existing code style and documentation standards. 
+// -   Use JSDoc comments to document functions and complex logic.
+
+// Scalability Foundations:
+
+// -  File Organization: Organize images by category or type to maintain a clear and scalable file structure. 
+// -   Cloud Storage:   In the future, consider using a cloud-based image storage service like Amazon S3 for scalability and redundancy. 
+// -  Image CDN:   Use an image CDN (Content Delivery Network) to distribute image files efficiently and improve performance.
+
+//  Ensure the code is thoroughly tested to validate functionality and performance.
